@@ -6,9 +6,11 @@ import java.util.Scanner;
 
 public class DialogSequence{
   Scanner scanner;
+  long timer;
 
   public DialogSequence(){
     scanner = new Scanner(System.in);
+    clearDialog();
     executeSequence();
   }
 
@@ -17,8 +19,7 @@ public class DialogSequence{
   }
 
   public void clearDialog(){
-    scanner.nextLine();
-    System.out.println("Press enter to try again.");
+
     try {
       String os = System.getProperty("os.name").toLowerCase();
 
@@ -36,7 +37,7 @@ public class DialogSequence{
   }
 
   private void choosePrimeOperationDialog(){
-    System.out.println("What would you like to check?");
+    System.out.println("What would you like to do?");
     System.out.println("-----------------------------");
     System.out.println("1. Check if a number is prime.");
     System.out.println("2. Check how many primes there are up to and including a number (looped miller-rabin test).");
@@ -54,11 +55,17 @@ public class DialogSequence{
         System.err.println("Please choose a valid number of a given option.");
         e.printStackTrace();
         System.err.println("");
+        scanner.nextLine();
+        System.out.println("Press enter to try again.");
+        scanner.nextLine();
         clearDialog();
       } catch (IllegalStateException | NoSuchElementException e) {
         System.err.println("The command line is not accepted, please open a command line tool with a acceptable System.in line.");
         e.printStackTrace();
         System.err.println("");
+        scanner.nextLine();
+        System.out.println("Press enter to try again.");
+        scanner.nextLine();
         clearDialog();
       }
     }
@@ -70,9 +77,10 @@ public class DialogSequence{
         isPrimeSequence();
         break;
       case 2:
-        PrimeNumber.sumOfPrimeNumbers(enterNumberDialog("Enter the number to check for prime:"));
+        sumOfPrimeNumbersSequence();
         break;
       case 3:
+        sieveOfEratosthenesSequence();
         break;
       default:
         throw new AssertionError();
@@ -80,11 +88,31 @@ public class DialogSequence{
   }
 
   private void isPrimeSequence(){
-    long numberToCheck = enterNumberDialog("Enter the number to check for prime:");
-    System.out.println("Your number "+ numberToCheck + "is" + (PrimeNumber.isPrime(numberToCheck)?" ":" not ") + "a prime number");
+    long numberToCheck = enterLongDialog("Enter the number to check for prime:");
+    Timer timer = new Timer();
+    System.out.println("Your number "+ numberToCheck + " is " + (PrimeNumber.isPrime(numberToCheck)?"":"not") + " a prime number.");
+    timer.stop();
+    System.out.println("The computation took "+ timer.getFormatedString() + ".");
   }
 
-  private long enterNumberDialog(String msg) throws IllegalStateException{
+  private void sumOfPrimeNumbersSequence () {
+    long numberToCheck = enterLongDialog("Enter the number to check for prime:");
+    Timer timer = new Timer();
+    System.out.println("From 0 to "+ numberToCheck + " there are " + PrimeNumber.countPrimes(numberToCheck) + " prime numbers.");
+    timer.stop();
+    System.out.println("The computation took "+ timer.getFormatedString() + ".");
+  }
+
+  private void sieveOfEratosthenesSequence(){
+    int numberToCheck = enterIntegerDialog("Enter the number to check for prime:");
+    Timer timer = new Timer();
+    Boolean[] isPrimeArray = PrimeNumber.sieveOfEratosthenes(numberToCheck);
+    timer.stop();
+    System.out.println("From 0 to "+ numberToCheck + " there are " + PrimeNumber.countArray(isPrimeArray, true) + " prime numbers.");
+    System.out.println("The computation took "+ timer.getFormatedString() + ".");
+  }
+
+  private long enterLongDialog (String msg) throws IllegalStateException{
     boolean isCorrect = false;
     while(!isCorrect){
       System.out.println(msg);
@@ -95,6 +123,29 @@ public class DialogSequence{
       } catch (Exception e) {
         System.err.println("Please enter a valid 64bit non-floating point number.");
         e.printStackTrace();
+        scanner.nextLine();
+        System.out.println("Press enter to try again.");
+        scanner.nextLine();
+        clearDialog();
+      }
+    }
+    throw new IllegalStateException("Critical Error: while-loop was not entered correctly. Please restart the program and report this error.");
+  }
+
+  private int enterIntegerDialog (String msg) throws IllegalStateException{
+    boolean isCorrect = false;
+    while(!isCorrect){
+      System.out.println(msg);
+      try {
+        int input = scanner.nextInt();
+        isCorrect = !isCorrect;
+        return input;
+      } catch (Exception e) {
+        System.err.println("Please enter a valid 32bit non-floating point number.");
+        e.printStackTrace();
+        scanner.nextLine();
+        System.out.println("Press enter to try again.");
+        scanner.nextLine();
         clearDialog();
       }
     }
