@@ -108,7 +108,7 @@ public class PrimeNumber{
   }
 
   // sadly here I can only work with integer as arrays only support 2^63-8
-  public static Boolean[] sieveOfEratosthenes ( int upperBound ) throws IllegalArgumentException {
+  public static Boolean[] eratosthenes ( int upperBound ) throws IllegalArgumentException {
 
     if ( upperBound > Integer.MAX_VALUE-8 || upperBound < 1 ) {
       throw new IllegalArgumentException( "Please choose a number between 1 and " + (Integer.MAX_VALUE-9) + "." );

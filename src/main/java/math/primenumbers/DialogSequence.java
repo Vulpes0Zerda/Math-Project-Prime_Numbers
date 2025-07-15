@@ -106,7 +106,7 @@ public class DialogSequence{
   private void sieveOfEratosthenesSequence(){
     int numberToCheck = enterIntegerDialog("Enter the number to check for prime:");
     Timer timer = new Timer();
-    Boolean[] isPrimeArray = PrimeNumber.sieveOfEratosthenes(numberToCheck);
+    Boolean[] isPrimeArray = PrimeNumber.eratosthenes(numberToCheck);
     timer.stop();
     System.out.println("From 0 to "+ numberToCheck + " there are " + PrimeNumber.countArray(isPrimeArray, true) + " prime numbers.");
     System.out.println("The computation took "+ timer.getFormatedString() + ".");
